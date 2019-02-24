@@ -1,28 +1,59 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+import List from './components/List';
+import Input from './components/Input';
+import { AppWrapper } from './styles';
+
+const AppContainer = () => {
+  let [todos, setList] = useState([
+    {
+      text: 'Learn hooks',
+      isChecked: true,
+    },
+    {
+      text: 'Implement Hooks on Real Project',
+      isChecked: false,
+    },
+  ]);
+
+  function updateTodos(id, isCheck) {
+    const newState = todos;
+    const updateState = newState.map((todo, index) => {
+      if (index === id) {
+        return {
+          ...todo,
+          isChecked: isCheck,
+        }
+      }
+
+      return todo;
+    })
+
+    setList(todos = updateState);
   }
-}
 
-export default App;
+  function addNewTodo(todo) {
+    const newTodo = [
+      ...todos,
+      {
+        text: todo,
+        isChecked: false,
+      },
+    ]
+
+    setList(todos = newTodo);
+  };
+
+  const renderFragment = todos.map((todo, index) => {
+    return <List key={index} id={index} text={todo.text} isChecked={todo.isChecked} onCheck={updateTodos} />;
+  });
+
+  return (
+    <AppWrapper>
+      {renderFragment}
+      <Input onAddTodo={addNewTodo}/>
+    </AppWrapper>
+  );
+};
+
+export default AppContainer;
