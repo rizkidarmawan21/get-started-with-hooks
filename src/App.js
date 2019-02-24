@@ -5,7 +5,7 @@ import Input from './components/Input';
 import { AppWrapper } from './styles';
 
 const AppContainer = () => {
-  let [todos, setList] = useState([
+  let [task, setTask] = useState([
     {
       text: 'Learn hooks',
       isChecked: true,
@@ -16,42 +16,63 @@ const AppContainer = () => {
     },
   ]);
 
-  function updateTodos(id, isCheck) {
-    const newState = todos;
+  function updateTask(id, isCheck) {
+    const newState = task;
     const updateState = newState.map((todo, index) => {
       if (index === id) {
         return {
           ...todo,
           isChecked: isCheck,
-        }
+        };
       }
 
       return todo;
-    })
+    });
 
-    setList(todos = updateState);
+    setTask((task = updateState));
   }
 
-  function addNewTodo(todo) {
+  function addNewTask(todo) {
     const newTodo = [
-      ...todos,
+      ...task,
       {
         text: todo,
         isChecked: false,
       },
-    ]
+    ];
 
-    setList(todos = newTodo);
-  };
+    setTask((task = newTodo));
+  }
 
-  const renderFragment = todos.map((todo, index) => {
-    return <List key={index} id={index} text={todo.text} isChecked={todo.isChecked} onCheck={updateTodos} />;
+  function deleteTask(id) {
+    const newTask = task.filter((todo, index) => {
+      if (index === id) {
+        return undefined;
+      }
+
+      return todo;
+    });
+
+    setTask((task = newTask));
+  }
+
+  const renderFragment = task.map((todo, index) => {
+    return (
+      <List
+        key={index}
+        id={index}
+        text={todo.text}
+        isChecked={todo.isChecked}
+        onCheck={updateTask}
+        onDelete={deleteTask}
+      />
+    );
   });
 
   return (
     <AppWrapper>
-      {renderFragment}
-      <Input onAddTodo={addNewTodo}/>
+      {renderFragment.length === 0 ? 'Tidak ada Task' : renderFragment }
+      <Input onAddTodo={addNewTask} />
     </AppWrapper>
   );
 };

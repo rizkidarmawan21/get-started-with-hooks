@@ -2,9 +2,9 @@ import React from "react";
 import { bool, string, number, func } from "prop-types";
 import { cx } from 'emotion';
 
-import { listWrapper, checkedStyle } from "./styles";
+import { listWrapper, checkedStyle, deleteStyle } from "./styles";
 
-const List = ({ id, text, isChecked, onCheck }) => {
+const List = ({ id, text, isChecked, onCheck, onDelete }) => {
   return (
     <div className={cx(listWrapper, isChecked ? checkedStyle : '')}>
       <input
@@ -14,6 +14,7 @@ const List = ({ id, text, isChecked, onCheck }) => {
         onChange={() => onCheck(id, !isChecked)}
       />
       <span onClick={() => onCheck(id, !isChecked)}>{text}</span>
+      {isChecked && <button className={deleteStyle} onClick={() => onDelete(id)}>x</button>}
     </div>
   );
 };
@@ -22,6 +23,7 @@ List.propTypes = {
   id: number,
   isChecked: bool,
   onCheck: func.isRequired,
+  onDelete: func.isRequired,
   text: string.isRequired
 };
 
